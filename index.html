@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#170d2c">
+<meta name="description" content="MY SAVINGS RPG: convierte tus ahorros en una aventura.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<title>MY SAVINGS RPG</title>
+<style>
+:root{color-scheme:dark;--bg:#10091d;--panel:#1c1230;--panel2:#26183d;--purple:#a879ff;--pink:#e18cff;--text:#f7f0ff;--muted:#b9a9ce;--green:#68e0b0;--red:#ff829d;--line:#3a2853}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#38205c 0%,var(--bg) 48%);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh;padding-bottom:88px}
+header{padding:22px 18px 12px;display:flex;align-items:center;justify-content:space-between;max-width:850px;margin:auto}
+.brand{font-weight:900;letter-spacing:.7px;font-size:18px}.brand span{color:var(--purple)}.level{border:1px solid #674a8c;background:#28183f;border-radius:30px;padding:8px 12px;color:#e8d8ff;font-size:12px}
+main{max-width:850px;margin:auto;padding:8px 16px}.hero{background:linear-gradient(135deg,#55328b,#281844 65%,#211334);border:1px solid #7652a1;border-radius:24px;padding:22px;box-shadow:0 14px 40px #0005}
+.eyebrow{color:#ddc8ff;font-size:11px;letter-spacing:1.5px;font-weight:800}.balance{font-size:clamp(34px,9vw,48px);font-weight:900;margin:7px 0 2px;letter-spacing:-1.5px}.muted{color:var(--muted)}.progress{height:10px;background:#140c22;border-radius:20px;overflow:hidden;margin:14px 0 8px}.bar{height:100%;width:0;background:linear-gradient(90deg,#b67cff,#ff9ae9);border-radius:20px;transition:width .3s}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}.stat,.card{background:#1b122b;border:1px solid var(--line);border-radius:18px;padding:15px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:20px;margin-top:5px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 10px}.section-head h2{font-size:17px;margin:0}.link{color:#d9baff;background:none;border:0;font:inherit}
+.goals{display:grid;gap:10px}.goal{background:linear-gradient(120deg,#211536,#191024);border:1px solid var(--line);border-radius:18px;padding:15px}.goal-top{display:flex;justify-content:space-between;gap:8px}.goal h3{margin:0 0 4px;font-size:15px}.goal p{margin:0;color:var(--muted);font-size:12px}.goal .progress{height:8px;margin:12px 0 6px}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:#160e24ed;backdrop-filter:blur(16px);border-top:1px solid #49325f;display:flex;justify-content:center;z-index:5;padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom));}
+.tabrow{width:min(850px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.tab{border:0;background:transparent;color:#a996c0;border-radius:13px;padding:8px 2px;font-size:11px}.tab b{display:block;font-size:19px;margin-bottom:2px}.tab.active{background:#392453;color:#f5eaff}
+.page{display:none}.page.active{display:block}.btn{border:0;border-radius:13px;padding:12px 15px;background:linear-gradient(100deg,#a56cff,#d17cff);color:#190c29;font-weight:800;font-size:14px}.btn.secondary{background:#332246;color:#f3e9ff;border:1px solid #60457b}.btn.danger{background:#542337;color:#ffdce5}.full{width:100%}
+input,select{width:100%;background:#120b1d;color:var(--text);border:1px solid #59416e;border-radius:11px;padding:12px;font:inherit;margin:5px 0 12px}label{display:block;color:var(--muted);font-size:12px;margin-top:8px}
+.item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #342344}.item:last-child{border:0}.item strong{display:block}.item small{color:var(--muted)}.positive{color:var(--green)}.negative{color:var(--red)}
+.modal{position:fixed;inset:0;background:#0009;display:none;align-items:end;justify-content:center;z-index:10}.modal.show{display:flex}.sheet{background:#211632;border:1px solid #674b83;border-radius:22px 22px 0 0;padding:20px;width:min(600px,100%);max-height:90vh;overflow:auto}
+.badge{font-size:11px;background:#3a2853;color:#e8d8ff;border-radius:20px;padding:5px 9px}.empty{text-align:center;padding:25px;color:var(--muted)}
+footer{text-align:center;color:#8e7ca5;font-size:11px;padding:25px}
+@media(min-width:650px){.stats{grid-template-columns:repeat(4,1fr)}.goals{grid-template-columns:1fr 1fr}.modal{align-items:center}.sheet{border-radius:22px}}
+</style>
+</head>
+<body>
+<header><div class="brand">✦ MY <span>SAVINGS</span> RPG</div><div class="level" id="levelPill">NIVEL 1 · NOVATO</div></header>
+<main>
+<section id="home" class="page active">
+ <div class="hero"><div class="eyebrow">TU AVENTURA FINANCIERA</div><div class="balance" id="balance">$0.00</div><div class="muted">Ahorro acumulado</div><div class="progress"><div class="bar" id="xpBar"></div></div><div class="muted" id="xpText">0 XP · empieza tu aventura</div></div>
+ <div class="stats">
+  <div class="stat"><small>💸 Disponible</small><strong id="available">$0</strong></div>
+  <div class="stat"><small>📥 Ingresos</small><strong id="income">$0</strong></div>
+  <div class="stat"><small>🧾 Gastos</small><strong id="expenses">$0</strong></div>
+  <div class="stat"><small>🔥 Semanas</small><strong id="weeks">0</strong></div>
+ </div>
+ <div class="section-head"><h2>🎯 Mis misiones</h2><button class="link" onclick="showPage('goals')">Ver todas →</button></div>
+ <div id="homeGoals" class="goals"></div>
+ <div class="section-head"><h2>⚡ Acciones rápidas</h2></div>
+ <div class="stats"><button class="btn" onclick="weekly()">+ Semana $450</button><button class="btn secondary" onclick="openMovement('Gasto')">− Registrar gasto</button></div>
+</section>
+<section id="goals" class="page">
+ <div class="section-head"><h2>🎯 Misiones y objetivos</h2><button class="btn" onclick="addGoal()">+ Meta</button></div><div id="goalList" class="goals"></div>
+</section>
+<section id="moves" class="page">
+ <div class="section-head"><h2>📜 Historial</h2><button class="btn" onclick="openMovement('Gasto')">+ Movimiento</button></div><div class="card" id="movementList"></div>
+</section>
+<section id="stats" class="page">
+ <div class="section-head"><h2>🏆 Progreso RPG</h2></div><div class="card"><div class="eyebrow">NIVEL ACTUAL</div><div class="balance" id="bigLevel">1</div><p class="muted" id="rankText">Novato en ahorro</p><div class="progress"><div class="bar" id="bigBar"></div></div><p id="statsText" class="muted"></p></div>
+ <div class="section-head"><h2>🏅 Logros</h2></div><div class="card" id="achievements"></div>
+ <div class="section-head"><h2>💾 Tus datos</h2></div><div class="card"><p class="muted">Tus movimientos se guardan en este dispositivo. Exporta una copia de seguridad de vez en cuando.</p><button class="btn secondary full" onclick="backup()">Exportar respaldo JSON</button><label>Restaurar respaldo</label><input type="file" id="restoreFile" accept="application/json" onchange="restore(event)"></div>
+</section>
+<footer>MY SAVINGS RPG · Tu progreso se guarda en este dispositivo.</footer>
+</main>
+<nav class="tabs"><div class="tabrow">
+<button class="tab active" data-page="home" onclick="showPage('home')"><b>⌂</b>Inicio</button>
+<button class="tab" data-page="goals" onclick="showPage('goals')"><b>◎</b>Metas</button>
+<button class="tab" data-page="moves" onclick="showPage('moves')"><b>☷</b>Movimientos</button>
+<button class="tab" data-page="stats" onclick="showPage('stats')"><b>♜</b>RPG</button>
+</div></nav>
+<div class="modal" id="modal"><div class="sheet"><div class="section-head"><h2 id="modalTitle">Movimiento</h2><button class="link" onclick="closeModal()">Cerrar ✕</button></div><div id="modalBody"></div></div></div>
+<script>
+const KEY='mysavingsrpg_v1';
+const initial={available:0,saved:0,income:0,expenses:0,weeks:0,moves:[],goals:[{id:1,name:'Soundcore Boom 2 Plus',target:2200,saved:0,icon:'🔊'},{id:2,name:'iScooter iX7 Pro',target:9500,saved:0,icon:'🛴'}],nextId:2};
+let data;try{data=JSON.parse(localStorage.getItem(KEY))||structuredClone(initial)}catch(e){data=JSON.parse(JSON.stringify(initial))}
+function persist(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function money(n){return new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n||0)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function totalGoal(){return data.goals.reduce((s,g)=>s+g.saved,0)}
+function xp(){return Math.floor(data.saved/10)+data.weeks*25+data.moves.length*5}
+function render(){
+ document.getElementById('balance').textContent=money(data.saved);document.getElementById('available').textContent=money(data.available);document.getElementById('income').textContent=money(data.income);document.getElementById('expenses').textContent=money(data.expenses);document.getElementById('weeks').textContent=data.weeks;
+ let level=1+Math.floor(xp()/250),rank=['Novato','Ahorrador','Explorador','Estratega','Maestro','Leyenda'][Math.min(5,Math.floor((level-1)/3))],progress=xp()%250/250*100;
+ document.getElementById('levelPill').textContent=`NIVEL ${level} · ${rank.toUpperCase()}`;document.getElementById('xpBar').style.width=progress+'%';document.getElementById('xpText').textContent=`${xp()} XP · ${250-xp()%250} XP para el siguiente nivel`;
+ document.getElementById('bigLevel').textContent=level;document.getElementById('rankText').textContent=rank+' en ahorro';document.getElementById('bigBar').style.width=progress+'%';document.getElementById('statsText').textContent=`Has registrado ${data.moves.length} movimientos y completado ${data.weeks} semanas de ahorro.`;
+ const cards=data.goals.map(g=>goalHTML(g)).join('');document.getElementById('homeGoals').innerHTML=cards||'<div class="empty">Aún no tienes misiones.</div>';document.getElementById('goalList').innerHTML=cards||'<div class="empty">Crea tu primera meta.</div>';
+ document.getElementById('movementList').innerHTML=data.moves.length?data.moves.slice().reverse().map(m=>`<div class="item"><div><strong>${esc(m.title)}</strong><small>${esc(m.date)} · ${esc(m.kind)}</small></div><div class="${m.kind==='Gasto'?'negative':'positive'}">${m.kind==='Gasto'?'-':'+'}${money(m.amount)}<br><button class="link" onclick="removeMove(${m.id})">Eliminar</button></div></div>`).join(''):'<div class="empty">Todavía no hay movimientos.</div>';
+ let earned=[];if(data.weeks>=1)earned.push('🔥 Primera semana');if(data.saved>=500)earned.push('💜 Primeros $500');if(data.saved>=2000)earned.push('💎 Ahorro de $2,000');if(data.moves.length>=10)earned.push('📜 Diez movimientos');if(data.goals.some(g=>g.saved>=g.target))earned.push('🏁 Misión completada');
+ document.getElementById('achievements').innerHTML=earned.length?earned.map(x=>`<div class="item">${x}<span class="badge">DESBLOQUEADO</span></div>`).join(''):'<div class="empty">Tus logros aparecerán aquí mientras avanzas.</div>';
+}
+function goalHTML(g){let p=Math.min(100,g.saved/g.target*100);return `<div class="goal"><div class="goal-top"><div><h3>${g.icon||'🎯'} ${esc(g.name)}</h3><p>${money(g.saved)} de ${money(g.target)}</p></div><span class="badge">${p.toFixed(0)}%</span></div><div class="progress"><div class="bar" style="width:${p}%"></div></div><button class="link" onclick="editGoal(${g.id})">Editar meta</button></div>`}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.page===id))}
+function openMovement(kind){document.getElementById('modalTitle').textContent=kind==='Gasto'?'Registrar gasto':'Registrar ingreso';document.getElementById('modalBody').innerHTML=`<label>Descripción</label><input id="mTitle" placeholder="Ej. comida, regalo, ingreso extra"><label>Cantidad (MXN)</label><input id="mAmount" type="number" min="1" step="1" placeholder="0"><button class="btn full" onclick="saveMove('${kind}')">Guardar movimiento</button>`;document.getElementById('modal').classList.add('show')}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function saveMove(kind){let title=document.getElementById('mTitle').value.trim(),amount=Number(document.getElementById('mAmount').value);if(!title||!amount||amount<=0)return alert('Escribe una descripción y una cantidad válida.');if(kind==='Gasto'&&amount>data.available)return alert('No tienes suficiente saldo disponible.');if(kind==='Gasto'){data.available-=amount;data.expenses+=amount}else{data.available+=amount;data.income+=amount}data.moves.push({id:Date.now(),title,amount,kind,date:new Date().toLocaleDateString('es-MX')});closeModal();persist()}
+function weekly(){if(!confirm('Registrar una semana: +$450 de ingreso, $250 a ahorro y $200 disponibles. ¿Continuar?'))return;data.income+=450;data.saved+=250;data.available+=200;data.weeks++;data.moves.push({id:Date.now(),title:'Ingreso semanal',amount:450,kind:'Ingreso',date:new Date().toLocaleDateString('es-MX')},{id:Date.now()+1,title:'Ahorro semanal',amount:250,kind:'Ahorro',date:new Date().toLocaleDateString('es-MX')});persist()}
+function addGoal(){document.getElementById('modalTitle').textContent='Nueva misión';document.getElementById('modalBody').innerHTML='<label>Nombre</label><input id="gName" placeholder="Mi próxima compra"><label>Precio objetivo (MXN)</label><input id="gTarget" type="number" min="1" placeholder="5000"><button class="btn full" onclick="saveGoal()">Crear misión</button>';document.getElementById('modal').classList.add('show')}
+function saveGoal(){let name=document.getElementById('gName').value.trim(),target=Number(document.getElementById('gTarget').value);if(!name||target<=0)return alert('Completa los datos.');data.goals.push({id:++data.nextId,name,target,saved:0,icon:'🎯'});closeModal();persist()}
+function editGoal(id){let g=data.goals.find(x=>x.id===id);document.getElementById('modalTitle').textContent='Editar misión';document.getElementById('modalBody').innerHTML=`<label>Nombre</label><input id="gName" value="${esc(g.name)}"><label>Precio objetivo</label><input id="gTarget" type="number" value="${g.target}"><label>Aportar a esta meta (se descuenta del disponible)</label><input id="gAdd" type="number" min="0" placeholder="0"><button class="btn full" onclick="updateGoal(${id})">Guardar cambios</button>`;document.getElementById('modal').classList.add('show')}
+function updateGoal(id){let g=data.goals.find(x=>x.id===id),name=document.getElementById('gName').value.trim(),target=Number(document.getElementById('gTarget').value),add=Number(document.getElementById('gAdd').value||0);if(!name||target<=0||add<0)return alert('Revisa los datos.');if(add>data.available)return alert('No tienes suficiente saldo disponible.');g.name=name;g.target=target;g.saved+=add;data.available-=add;data.saved+=add;if(add)data.moves.push({id:Date.now(),title:'Aporte: '+name,amount:add,kind:'Ahorro',date:new Date().toLocaleDateString('es-MX')});closeModal();persist()}
+function removeMove(id){if(!confirm('¿Eliminar este movimiento? Los saldos no se modificarán automáticamente; esta acción solo elimina el registro.'))return;data.moves=data.moves.filter(m=>m.id!==id);persist()}
+function backup(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-savings-rpg-respaldo.json';a.click();URL.revokeObjectURL(a.href)}
+function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.moves)||!Array.isArray(d.goals))throw 0;data=d;persist();alert('Respaldo restaurado.')}catch(_){alert('El archivo no parece un respaldo válido.')}};r.readAsText(f)}
+render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
